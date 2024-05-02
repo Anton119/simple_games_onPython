@@ -88,65 +88,88 @@ def print_figure (figure):
        
 def is_move_possible(glass, figure, y, x):
     for v in range (0, len(figure)):
-        #print()
         for h in range(0, len(figure[0])):
-            # остановка у дна стакана
-            #print(figure[v][h], end="")
-            #print("x+v-",x+v, " ", "y+h-",y+h, "x+h-", (x+h), "len(glass[v][0]) - ", len(glass[v][0]), "len(glass[0][h]) - ", len(glass[0][h]))
-            #print(glass[y+v][x+h], end="")
             
-            if figure[v][h] == "o" and (y+h) >= len(glass) and (x+h) >= len(glass[0]) or (y+v) >= len(glass) and (x+h) >= len(glass[0]):   
-               #
-               #len(glass) = y 
-               #gl = len(glass[0]) 
-               #gl = x
-                return " first False"
-               
-            if glass[v+y][h+x] == "o" and figure[v][h] == "o":
-                return "SECOND False" 
+            if y+v >= len(glass) and figure[v][h] == "o":
+                return False 
+            if x+h >= len(glass[0]) and figure[v][h] == "o":
+                return False 
+            if x+h < 0 and figure[v][h] == "o":
+                return False 
+                
+            if glass[v+y][x+h] == "o" and figure[v][h] == "o":
+                return False  
+            
+             
     return True 
-    # glass - изменен и записывается в glass_1         
+           
 
 def interface (glass, figure, y ,x):
     screen = initscr()
-    screen.addstr( 0, 0, "Hello")
-    print_field_interface(screen, glass, 5, 5)
-    
-    for i in range(0, len(glass)):
-        projection(glass, (y+i), x, figure)
-        screen.getch()
+    try:
+        screen.addstr( 0, 0, "Hello")
         print_field_interface(screen, glass, 5, 5)
     
-    screen.getch()
-    endwin()            
+        for i in range(0, len(glass)):
+            copied_glass = copy_glass(glass)
+            #projection(copied_glass, (y+i), x, figure)
+            #screen.getch()
+    
+            key = screen.getch()
+            if key == 97 :
+                #a - двигай влево
+                projection(copied_glass, y, (x-i), figure)
+            elif key == 100:
+                projection(copied_glass, y, (x+i), figure)
+                #d -  двигай вправо
+            elif key == 115:
+                projection(copied_glass, (y+1), x, figure)
+                #s - двигай вниз
+            print_field_interface(screen, copied_glass, 5, 5)
+    finally:
+        endwin()            
 
 def print_field_interface (screen, glass, y, x):
     for v in range(0, len(glass)):
         for h in range(0, len(glass[0])):
             screen.addstr((y+v), (x+h), glass[v][h])
+            
+            
+            
     
 # написать фунцкию для копирования массива 
-
+def copy_glass (glass):
+    copy = []
+    for y in range(0, len(glass)):
+        sub_array = []
+        for x in range(0, len(glass[0])):
+            sub_array.append(glass[y][x])
+        
+        copy.append(sub_array)
     
-
-
-
-
+    return copy 
+    
 
 
 #print_figure(projection(glass, 4, 6, zigzag))
 ##next_move = print_figure(projection(glass, 4, 6, zigzag))
 next_move = projection(glass, 2, 4, zigzag)
 next_move
-print_figure(projection(glass, 0, 0, zigzag))
+#print_figure(projection(glass, 0, 0, zigzag))
 print()
 print_figure(zigzag)
 print()
-print("(glass)x-",len(glass[0]), "(glass)y-", len(glass))
+print("(glass[0])x-",len(glass[0]), "(glass)y-", len(glass))
 print()
 interface(glass, zigzag, 0, 0)
+print(len(zigzag), len(zigzag[0]))
+print()
+#print_figure(copy_glass(glass))
 
-#print(is_move_possible(glass, zigzag, 12, 10))
+
+
+#print(is_move_possible(glass, zigzag, 1, 5))
+#next_move = print_figure(projection(glass, 1, 5, zigzag))
 #print()
 #print(len(zigzag[0]))
 #print()
