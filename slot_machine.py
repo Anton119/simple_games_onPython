@@ -4,6 +4,40 @@ MIN_BET = 1
 MAX_BET = 100
 MAX_LINES = 3
 
+ROWS = 3
+COLS = 3
+
+symbol_count = {
+    "A": 2,
+    "B": 4,
+    "C": 6,
+    "D": 8
+}
+
+def get_slot_machine_spin (rows, cols, symbols):
+    all_symbols = []
+    for symbol, amount_of_symbols in symbols.items():
+        for i in range(amount_of_symbols):
+            all_symbols.append(symbol)
+    
+    columns = []
+    for i in range(cols):
+        column = []
+        current_symbol = all_symbols[:]
+        for i in range(rows):
+            value = random.choice(current_symbol)
+            current_symbol.remove(value)
+            column.append(value)
+    
+        columns.append(column)
+    
+    return columns
+
+def print_slot_machine (columns):
+    for y in range(len(columns[0])):
+        print()
+        for x in range(len(columns)):
+            print(columns[y][x], end="|")
 
 
 def deposit():
@@ -57,6 +91,8 @@ def main():
     balance = deposit()
     lines = amount_of_lines()
     get_a_bet(balance, lines)
+    result = get_slot_machine_spin(ROWS, COLS, symbol_count)
+    print_slot_machine(result)
    
 
 
