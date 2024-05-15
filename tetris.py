@@ -1,5 +1,7 @@
 from curses import*
 
+from random import choice
+
 zigzag = [["o",".",".","."],
           ["o",".",".","."],
           ["o",".",".","."],
@@ -38,6 +40,8 @@ glass = [[".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."],
          
          # поле 17(x) на 16(y)
          # фигура 7(y) на 4(x)      
+
+array_of_figures = [zigzag, square]
 
 # создать алгоритм, чтобы цикл печатал элементы снизу фигуры 
 def turn_the_figure (figure):
@@ -105,7 +109,8 @@ def is_move_possible(glass, figure, y, x):
              
     return True 
            
-
+# функция которая берет кол-во мсек и ждет это кол-во млсек (цикл)
+# перед входом узнать время + прибавлять млсек до расчетного времени
 def interface (glass, figure, y ,x):
     screen = initscr()
     try:
@@ -116,20 +121,22 @@ def interface (glass, figure, y ,x):
             copied_glass = copy_glass(glass)
                 #projection(copied_glass, (y+i), x, figure)
                 #screen.getch()
-            
             key = screen.getch()
-            if key == 97 and is_move_possible(glass, figure, y, x-1) :
+            if key == 116 and is_move_possible(glass, figure, y, x) :
+                figure = turn_the_figure(figure)
+                # t - поворот
+                
+            elif key == 97 and is_move_possible(glass, figure, y, x-1) :
                 #a - двигай влево
                 x = x-1
-                
             elif key == 100 and is_move_possible(glass, figure, y, x+1):
                 x = x+1
-                
                 #d -  двигай вправо
             elif key == 115:
                 if is_move_possible(glass, figure, y+1, x):
                     y = y+1
                 else:
+                    figure = choice(array_of_figures)
                     new_position = projection(glass, y, x , figure)
                     y = 0
                 # сделать массив фигур и выбрать случайную 
