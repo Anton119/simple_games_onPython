@@ -14,24 +14,45 @@ symbol_count = {
     "D": 8
 }
 
+symbol_value = {
+    "A": 5,
+    "B": 4,
+    "C": 3,
+    "D": 2
+}
+
+def check_winnings(columns, lines, bet, values):
+    winnings = 0
+    for line in range(lines):
+        symbol = columns[0][line]
+        for column in columns:
+            symbol_to_check = column[line]
+            if symbol != symbol_to_check:
+                break
+        else:
+            winnings += values[symbol] * bet
+             
+    return winnings 
+
 def get_slot_machine_spin (rows, cols, symbols):
     all_symbols = []
     for symbol, amount_of_symbols in symbols.items():
-        for i in range(amount_of_symbols):
+        for _ in range(amount_of_symbols):
             all_symbols.append(symbol)
-    
+
     columns = []
     for i in range(cols):
-        column = []
         current_symbol = all_symbols[:]
+        column = []
         for i in range(rows):
             value = random.choice(current_symbol)
             current_symbol.remove(value)
             column.append(value)
-    
+        
         columns.append(column)
-    
-    return columns
+
+        
+    return columns  
 
 def print_slot_machine (columns):
     for y in range(len(columns[0])):
