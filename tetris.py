@@ -21,12 +21,12 @@ square = [["o","o","o","o"],
 # точка фигуры  не может оказаться в стакане, если 
 #  точка в стакане  равна "o" 
 #  точка другой фигуры не равна "."
-glass = [[".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."],
+glass = [["o","o","o","o","o","o","o","o","o","o","o","o","o","o","o","o","o"],
          [".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."],
          [".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."],
          [".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."],
-         [".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."],
-         [".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."],
+         [".","o",".","o","o",".",".",".",".",".",".",".",".",".",".",".","."],
+         [".","o",".","o","o",".",".",".",".",".",".",".",".",".",".",".","."],
          [".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."],
          [".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."],
          [".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."],
@@ -147,6 +147,33 @@ def interface (glass, figure, y ,x):
     finally:
         endwin()            
 
+######################
+def is_line_full(glass, line):
+    for x in range(0, len(glass[0])-1):
+        if glass[line][x] != "o": #and glass[line][x] == glass[line][x+1]:
+            continue
+        else:
+            return True
+    
+    return False
+
+
+def shift_line (glass, line_to_remove):
+    sub_array = []
+    del glass[line_to_remove]
+    for x in range(0, len(glass[0])):
+        sub_array.append(".")
+    
+    glass.insert(0, sub_array)    
+    
+    
+def check_and_remove_lines(glass):
+    for lines in range(len(glass)):
+        if is_line_full:
+            shift_line(glass, lines)
+
+
+
 def print_field_interface (screen, glass, y, x):
     for v in range(0, len(glass)):
         for h in range(0, len(glass[0])):
@@ -173,13 +200,22 @@ def copy_glass (glass):
 ##next_move = print_figure(projection(glass, 4, 6, zigzag))
 #next_move = projection(glass, 2, 4, zigzag)
 #next_move
-#print_figure(projection(glass, 0, 0, zigzag))
+#change_line = copy_line(glass, 0, 9)
+#shift_line(glass, 9)
+
+print_figure(glass)
 print()
-print_figure(zigzag)
+check_and_remove_lines(glass)
+#print_figure(projection(glass, 5, 5, zigzag))
+print_figure(glass)
 print()
+#print_figure(zigzag)
+print()
+full = is_line_full(glass, 0)
+print(full)
 print("(glass[0])x-",len(glass[0]), "(glass)y-", len(glass))
 print()
-interface(glass, zigzag, 0, 0)
+#interface(glass, zigzag, 0, 0)
 print(len(zigzag), len(zigzag[0]))
 print()
 #print(is_move_possible(glass, zigzag, 0, 14))
